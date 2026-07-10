@@ -1,0 +1,66 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Vehicle {
+  id             String    @id @default(uuid())
+  nickname       String
+  year           Int
+  make           String
+  model          String
+  vin            String?
+  currentMileage Int?
+  purchaseDate   DateTime?
+  notes          String?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  maintenanceRecords MaintenanceRecord[]
+
+  @@map("vehicles")
+}
+
+model MaintenanceCategory {
+  id                    String @id @default(uuid())
+  name                  String @unique
+  defaultIntervalMiles  Int?
+  defaultIntervalMonths Int?
+
+  maintenanceRecords MaintenanceRecord[]
+
+  @@map("maintenance_categories")
+}
+
+enum PerformedBy {
+  SELF
+  SHOP
+}
+
+model MaintenanceRecord {
+  id               String      @id @default(uuid())
+  vehicleId        String
+  categoryId       String?
+  title            String?
+  datePerformed    DateTime
+  mileageAtService Int?
+  cost             Decimal?    @db.Decimal(10, 2)
+  performedBy      PerformedBy @default(SELF)
+  shopName         String?
+  notes            String?
+  nextDueMileage   Int?
+  nextDueDate      DateTime?
+  createdAt        DateTime    @default(now())
+  updatedAt        DateTime    @updatedAt
+
+  vehicle  Vehicle              @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+  category MaintenanceCategory? @relation(fields: [categoryId], references: [id])
+
+  @@index([vehicleId])
+  @@index([categoryId])
+  @@map("maintenance_records")
+}
