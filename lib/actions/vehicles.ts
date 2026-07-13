@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
 
@@ -21,13 +22,35 @@ const vehicleSchema = z.object({
 
 export type VehicleInput = z.infer<typeof vehicleSchema>;
 
-export async function createVehicle(input: VehicleInput) {
-  const data = vehicleSchema.parse(input);
+export type CreateVehicleState = {
+  errors?: Partial<Record<keyof VehicleInput, string[]>>;
+  message?: string;
+} | null;
 
-  const vehicle = await prisma.vehicle.create({ data });
+export async function createVehicle(_prevState: CreateVehicleState, formData: FormData): Promise<CreateVehicleState> {
+  const raw = Object.fromEntries(formData.entries());
+
+  const cleaned = {
+    ...raw,
+    vin: raw.vin === "" ? undefined : raw.vin,
+    currentMileage: raw.currentMileage === "" ? undefined : raw.currentMileage,
+    purchaseDate: raw.purchaseDate === "" ? undefined : raw.purchaseDate,
+    notes: raw.notes === "" ? undefined : raw.notes,
+  };
+
+  const parsed = vehicleSchema.safeParse(cleaned);
+
+  if (!parsed.success) {
+    return {
+      errors: z.flattenError(parsed.error).fieldErrors,
+      message: "Please fix the errors below.",
+    };
+  }
+
+  await prisma.vehicle.create({ data: parsed.data });
 
   revalidatePath("/vehicles");
-  return vehicle;
+  redirect("/vehicles");
 }
 
 export async function getVehicles() {
