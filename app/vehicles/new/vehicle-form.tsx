@@ -25,7 +25,7 @@ const VehicleForm = () => {
         type='number'
         errors={state?.errors?.currentMileage}
       />
-      <Field label='Purchase date (optional)' name='purchaseDate' type='number' errors={state?.errors?.purchaseDate} />
+      <Field label='Purchase date (optional)' name='purchaseDate' type='date' errors={state?.errors?.purchaseDate} />
 
       <div>
         <label htmlFor='notes' className='block text-sm font-medium text-neutral-700'>
