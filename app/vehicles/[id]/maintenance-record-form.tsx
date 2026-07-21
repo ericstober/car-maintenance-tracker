@@ -96,7 +96,7 @@ const MaintenanceRecordForm = ({ vehicleId, categories }: { vehicleId: string; c
           type='number'
           errors={state?.errors?.nextDueMileage}
         />
-        <Field label='Next due date (optional)' name='nextDueDate' type='number' errors={state?.errors?.nextDueDate} />
+        <Field label='Next due date (optional)' name='nextDueDate' type='date' errors={state?.errors?.nextDueDate} />
       </div>
 
       {state?.message && <p className='text-sm text-red-600'>{state.message}</p>}
