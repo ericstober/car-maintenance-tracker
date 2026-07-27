@@ -47,7 +47,7 @@ const MaintenanceRecordForm = ({ vehicleId, categories }: { vehicleId: string; c
         <Field
           label='Mileage at service (optional)'
           name='mileageAtService'
-          type='date'
+          type='number'
           errors={state?.errors?.mileageAtService}
         />
       </div>
