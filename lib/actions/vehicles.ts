@@ -77,21 +77,45 @@ export async function getVehicleById(id: string) {
   return vehicle;
 }
 
-export async function updateVehicle(id: string, input: Partial<VehicleInput>) {
-  const data = vehicleSchema.partial().parse(input);
+export type UpdateVehicleState = {
+  errors?: Partial<Record<keyof VehicleInput, string[]>>;
+  message?: string;
+} | null;
 
-  const vehicle = await prisma.vehicle.update({
-    where: { id },
-    data,
-  });
+export async function updateVehicle(
+  id: string,
+  _prevState: UpdateVehicleState,
+  formData: FormData,
+): Promise<UpdateVehicleState> {
+  const raw = Object.fromEntries(formData.entries());
+
+  const cleaned = {
+    ...raw,
+    vin: raw.vin === "" ? undefined : raw.vin,
+    currentMileage: raw.currentMileage === "" ? undefined : raw.currentMileage,
+    purchaseDate: raw.purchaseDate === "" ? undefined : raw.purchaseDate,
+    notes: raw.notes === "" ? undefined : raw.notes,
+  };
+
+  const parsed = vehicleSchema.safeParse(cleaned);
+
+  if (!parsed.success) {
+    return {
+      errors: z.flattenError(parsed.error).fieldErrors,
+      message: "Please fix the errors below.",
+    };
+  }
+
+  await prisma.vehicle.update({ where: { id }, data: parsed.data });
 
   revalidatePath("/vehicles");
   revalidatePath(`/vehicles/${id}`);
-  return vehicle;
+  redirect(`/vehicles/${id}`);
 }
 
 export async function deleteVehicle(id: string) {
   await prisma.vehicle.delete({ where: { id } });
 
   revalidatePath("/vehicles");
+  redirect("/vehicles");
 }
