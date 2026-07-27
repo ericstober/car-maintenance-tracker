@@ -89,17 +89,44 @@ export async function getMaintenanceRecordById(id: string) {
   return record;
 }
 
-export async function updateMaintenanceRecord(id: string, input: Partial<MaintenanceRecordInput>) {
-  const data = maintenanceRecordSchema.partial().parse(input);
+export type UpdateMaintenanceRecordState = {
+  errors?: Partial<Record<keyof MaintenanceRecordFormInput, string[]>>;
+  message?: string;
+} | null;
 
-  const record = await prisma.maintenanceRecord.update({
-    where: { id },
-    data,
-    include: { category: true },
-  });
+export async function updateMaintenanceRecord(
+  id: string,
+  vehicleId: string,
+  _prevState: UpdateMaintenanceRecordState,
+  formData: FormData,
+): Promise<UpdateMaintenanceRecordState> {
+  const raw = Object.fromEntries(formData.entries());
 
-  revalidatePath(`/vehicles/${record.vehicleId}`);
-  return record;
+  const cleaned = {
+    ...raw,
+    categoryId: raw.categoryId === "" ? undefined : raw.categoryId,
+    title: raw.title === "" ? undefined : raw.title,
+    mileageAtService: raw.mileageAtService === "" ? undefined : raw.mileageAtService,
+    cost: raw.cost === "" ? undefined : raw.cost,
+    shopName: raw.shopName === "" ? undefined : raw.shopName,
+    notes: raw.notes === "" ? undefined : raw.notes,
+    nextDueMileage: raw.nextDueMileage === "" ? undefined : raw.nextDueMileage,
+    nextDueDate: raw.nextDueDate === "" ? undefined : raw.nextDueDate,
+  };
+
+  const parsed = maintenanceRecordFormSchema.safeParse(cleaned);
+
+  if (!parsed.success) {
+    return {
+      errors: z.flattenError(parsed.error).fieldErrors,
+      message: "Please fix the errors below.",
+    };
+  }
+
+  await prisma.maintenanceRecord.update({ where: { id }, data: parsed.data });
+
+  revalidatePath(`/vehicles/${vehicleId}`);
+  redirect(`/vehicles/${vehicleId}`);
 }
 
 export async function deleteMaintenanceRecord(id: string) {
