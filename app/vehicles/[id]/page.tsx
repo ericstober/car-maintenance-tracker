@@ -1,7 +1,8 @@
 import Link from "next/link";
-import { getVehicleById } from "@/lib/actions/vehicles";
-import { getMaintenanceCategories } from "@/lib/actions/maintenance-records";
+import { deleteVehicle, getVehicleById } from "@/lib/actions/vehicles";
+import { getMaintenanceCategories, deleteMaintenanceRecord } from "@/lib/actions/maintenance-records";
 import MaintenanceRecordForm from "./maintenance-record-form";
+import DeleteButton from "@/components/delete-button";
 
 const VehicleDetailsPage = async ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = await params;
@@ -24,6 +25,15 @@ const VehicleDetailsPage = async ({ params }: { params: Promise<{ id: string }> 
           {vehicle.vin && ` · VIN ${vehicle.vin}`}
         </p>
         {vehicle.notes && <p className='mt-3 text-sm text-neutral-600'>{vehicle.notes}</p>}
+      </div>
+      <div className='flex shrink-0 items-center gap-4'>
+        <Link href={`/vehicles/${id}/edit`} className='text-sm text-neutral-500 hover:text-neutral-800'>
+          Edit
+        </Link>
+        <DeleteButton
+          action={deleteVehicle.bind(null, vehicle.id)}
+          confirmMessage={`Delete ${vehicle.nickname} and all of its maintenance history? This can't be undone.`}
+        />
       </div>
 
       <section className='mb-12'>
@@ -58,6 +68,15 @@ const VehicleDetailsPage = async ({ params }: { params: Promise<{ id: string }> 
                   {record.cost != null ? ` · $${record.cost.toString()}` : ""}
                 </p>
                 {record.notes && <p className='mt-1 text-sm text-neutral-600'>{record.notes}</p>}
+                <div className='mt-2 flex gap-4'>
+                  <Link href={`/records/${record.id}/edit`} className='text-sm text-neutral-500 hover:text-neutral-800'>
+                    Edit
+                  </Link>
+                  <DeleteButton
+                    action={deleteMaintenanceRecord.bind(null, record.id)}
+                    confirmMessage="Delete this maintenance record? This can't be undone."
+                  />
+                </div>
               </li>
             ))}
           </ul>
