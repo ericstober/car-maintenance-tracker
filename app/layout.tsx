@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import Header from "@/components/header";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -13,8 +14,11 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Car Maintenance Tracker",
-  description: "Web app for tracking car maintenance records",
+  title: {
+    default: "Garage Log",
+    template: "%s · Garage Log",
+  },
+  description: "Personal vehicle maintenance tracker",
 };
 
 export default function RootLayout({
@@ -24,7 +28,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en' className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
-      <body className='min-h-full flex flex-col'>{children}</body>
+      <body className='min-h-full flex flex-col'>
+        <Header />
+        {children}
+      </body>
     </html>
   );
 }
