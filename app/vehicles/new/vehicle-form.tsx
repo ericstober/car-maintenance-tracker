@@ -28,28 +28,28 @@ const VehicleForm = () => {
       <Field label='Purchase date (optional)' name='purchaseDate' type='date' errors={state?.errors?.purchaseDate} />
 
       <div>
-        <label htmlFor='notes' className='block text-sm font-medium text-neutral-700'>
+        <label htmlFor='notes' className='block font-medium text-neutral-700'>
           Notes (optional)
         </label>
         <textarea
           name='notes'
           id='notes'
           rows={3}
-          className='mt-1 w-full rounded-md border border-neutral-300 px-3 py-2 text-sm'
+          className='mt-1 w-full rounded-md border border-neutral-300 px-3 py-2'
         />
         {state?.errors?.notes?.map((error) => (
-          <p key={error} className='mt-1 text-sm text-red-600'>
+          <p key={error} className='mt-1 text-red-600'>
             {error}
           </p>
         ))}
       </div>
 
-      {state?.message && <p className='text-sm text-red-600'>{state.message}</p>}
+      {state?.message && <p className='text-red-600'>{state.message}</p>}
 
       <button
         type='submit'
         disabled={isPending}
-        className='rounded-md bg-neutral-900 px-4 py-2 text-sm font-medium text-white hover:bg-neutral-700 disabled:opacity-50'
+        className='rounded-md bg-neutral-900 px-4 py-2 font-medium text-white hover:bg-neutral-700 disabled:opacity-50'
       >
         {isPending ? "Saving..." : "Save vehicle"}
       </button>
@@ -72,17 +72,12 @@ function Field({
 }) {
   return (
     <div>
-      <label htmlFor={name} className='block text-sm font-medium text-neutral-700'>
+      <label htmlFor={name} className='block font-medium text-neutral-700'>
         {label}
       </label>
-      <input
-        id={name}
-        name={name}
-        type={type}
-        className='mt-1 w-full rounded-md border border-neutral-300 px-3 py-2 text-sm'
-      />
+      <input id={name} name={name} type={type} className='mt-1 w-full rounded-md border border-neutral-300 px-3 py-2' />
       {errors?.map((error) => (
-        <p key={error} className='mt-1 text-sm text-red-600'>
+        <p key={error} className='mt-1 text-red-600'>
           {error}
         </p>
       ))}
