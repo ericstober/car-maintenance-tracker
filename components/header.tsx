@@ -14,8 +14,8 @@ const Header = () => {
   return (
     <header className='border-b border-neutral-200'>
       <div className='mx-auto flex max-w-3xl items-center justify-between px-6 py-4'>
-        <Link href='/vehicles' className='font-mono text-sm font-semibold text-neutral-900'>
-          garage log
+        <Link href='/vehicles' className='font-mono font-semibold text-neutral-900'>
+          Garage Log
         </Link>
         <nav className='flex gap-6'>
           {navLinks.map((link) => {
@@ -24,9 +24,7 @@ const Header = () => {
               <Link
                 key={link.href}
                 href={link.href}
-                className={
-                  isActive ? "text-sm font-medium text-neutral-900" : "text-sm text-neutral-500 hover:text-neutral-800"
-                }
+                className={isActive ? "font-medium text-neutral-900" : "text-neutral-500 hover:text-neutral-800"}
               >
                 {link.label}
               </Link>
