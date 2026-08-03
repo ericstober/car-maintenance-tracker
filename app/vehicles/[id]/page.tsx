@@ -16,30 +16,31 @@ const VehicleDetailsPage = async ({ params }: { params: Promise<{ id: string }> 
   const [vehicle, categories] = await Promise.all([getVehicleById(id), getMaintenanceCategories()]);
 
   return (
-    <main className='mx-auto max-w-3xl px-6 py-12'>
-      <Link href='/vehicles' className='text-sm text-neutral-500 hover:text-neutral-800'>
+    <main className='mx-auto w-2xl px-6 py-12'>
+      <Link href='/vehicles' className='text-neutral-500 hover:text-neutral-800'>
         ← Back to garage
       </Link>
 
       <div className='mt-4 mb-10 border-b border-neutral-200 pb-6'>
-        <p className='font-mono text-xs uppercase tracking-widest text-amber-700'>
+        <p className='font-mono uppercase tracking-widest text-amber-700'>
           {vehicle.year} {vehicle.make} {vehicle.model}
         </p>
         <h1 className='mt-1 text-3xl font-semibold text-neutral-900'>{vehicle.nickname}</h1>
-        <p className='mt-2 font-mono text-sm text-neutral-500'>
+        <p className='mt-2 font-mono text-neutral-500'>
           {vehicle.currentMileage != null ? `${vehicle.currentMileage.toLocaleString()} mi` : "Mileage not set"}
           {vehicle.vin && ` · VIN ${vehicle.vin}`}
         </p>
-        {vehicle.notes && <p className='mt-3 text-sm text-neutral-600'>{vehicle.notes}</p>}
-      </div>
-      <div className='flex shrink-0 items-center gap-4'>
-        <Link href={`/vehicles/${id}/edit`} className='text-sm text-neutral-500 hover:text-neutral-800'>
-          Edit
-        </Link>
-        <DeleteButton
-          action={deleteVehicle.bind(null, vehicle.id)}
-          confirmMessage={`Delete ${vehicle.nickname} and all of its maintenance history? This can't be undone.`}
-        />
+        {vehicle.notes && <p className='mt-3 text-neutral-600'>{vehicle.notes}</p>}
+
+        <div className='flex shrink-0 items-center gap-4 mt-6'>
+          <Link href={`/vehicles/${id}/edit`} className='text-neutral-500 hover:text-neutral-800'>
+            Edit
+          </Link>
+          <DeleteButton
+            action={deleteVehicle.bind(null, vehicle.id)}
+            confirmMessage={`Delete ${vehicle.nickname} and all of its maintenance history? This can't be undone.`}
+          />
+        </div>
       </div>
 
       <section className='mb-12'>
@@ -51,7 +52,7 @@ const VehicleDetailsPage = async ({ params }: { params: Promise<{ id: string }> 
         <h2 className='mb-4 text-lg font-semibold text-neutral-900'>Maintenance history</h2>
 
         {vehicle.maintenanceRecords.length === 0 ? (
-          <p className='text-sm text-neutral-500'>No maintenance logged yet.</p>
+          <p className='text-neutral-500'>No maintenance logged yet.</p>
         ) : (
           <ul className='divide-y divide-neutral-200 border-t border-neutral-200'>
             {vehicle.maintenanceRecords.map((record) => (
@@ -60,11 +61,9 @@ const VehicleDetailsPage = async ({ params }: { params: Promise<{ id: string }> 
                   <p className='font-medium text-neutral-900'>
                     {record.category?.name ?? record.title ?? "Maintenance"}
                   </p>
-                  <p className='font-mono text-sm text-neutral-500'>
-                    {new Date(record.datePerformed).toLocaleDateString()}
-                  </p>
+                  <p className='font-mono text-neutral-500'>{new Date(record.datePerformed).toLocaleDateString()}</p>
                 </div>
-                <p className='text-sm text-neutral-500'>
+                <p className='text-neutral-500'>
                   {record.mileageAtService != null ? `${record.mileageAtService.toLocaleString()} mi` : ""}
                   {record.performedBy === "SHOP" && record.shopName
                     ? record.shopName
@@ -73,9 +72,9 @@ const VehicleDetailsPage = async ({ params }: { params: Promise<{ id: string }> 
                       : "Self"}
                   {record.cost != null ? ` · $${record.cost.toString()}` : ""}
                 </p>
-                {record.notes && <p className='mt-1 text-sm text-neutral-600'>{record.notes}</p>}
+                {record.notes && <p className='mt-1 text-neutral-600'>{record.notes}</p>}
                 <div className='mt-2 flex gap-4'>
-                  <Link href={`/records/${record.id}/edit`} className='text-sm text-neutral-500 hover:text-neutral-800'>
+                  <Link href={`/records/${record.id}/edit`} className='text-neutral-500 hover:text-neutral-800'>
                     Edit
                   </Link>
                   <DeleteButton

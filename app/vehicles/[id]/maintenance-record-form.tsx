@@ -17,13 +17,13 @@ const MaintenanceRecordForm = ({ vehicleId, categories }: { vehicleId: string; c
   return (
     <form action={formAction} className='space-y-5'>
       <div>
-        <label htmlFor='categoryId' className='block text-sm font-medium text-neutral-700'>
+        <label htmlFor='categoryId' className='block font-medium text-neutral-700'>
           Category
         </label>
         <select
           name='categoryId'
           id='categoryId'
-          className='mt-1 w-full rounded-md border border-neutral-300 px-3 py-2 text-sm'
+          className='mt-1 w-full rounded-md border border-neutral-300 px-3 py-2'
           defaultValue=''
         >
           <option value=''>— None / other —</option>
@@ -34,7 +34,7 @@ const MaintenanceRecordForm = ({ vehicleId, categories }: { vehicleId: string; c
           ))}
         </select>
         {state?.errors?.categoryId?.map((error) => (
-          <p key={error} className='mt-1 text-sm text-red-600'>
+          <p key={error} className='mt-1 text-red-600'>
             {error}
           </p>
         ))}
@@ -55,13 +55,13 @@ const MaintenanceRecordForm = ({ vehicleId, categories }: { vehicleId: string; c
       <div className='grid grid-cols-2 gap-4'>
         <Field label='Cost (optional)' name='cost' type='number' errors={state?.errors?.cost} />
         <div>
-          <label htmlFor='performedBy' className='block text-sm font-medium text-neutral-700'>
+          <label htmlFor='performedBy' className='block font-medium text-neutral-700'>
             Performed by
           </label>
           <select
             name='performedBy'
             id='performedBy'
-            className='mt-1 w-full rounded-md border border-neutral-300 px-3 py-2 text-sm'
+            className='mt-1 w-full rounded-md border border-neutral-300 px-3 py-2'
             defaultValue='SELF'
           >
             <option value='SELF'>Self</option>
@@ -73,17 +73,17 @@ const MaintenanceRecordForm = ({ vehicleId, categories }: { vehicleId: string; c
       <Field label='Shop name (optional)' name='shopName' errors={state?.errors?.shopName} />
 
       <div>
-        <label htmlFor='notes' className='block text-sm font-medium text-neutral-700'>
+        <label htmlFor='notes' className='block font-medium text-neutral-700'>
           Notes (optional)
         </label>
         <textarea
           name='notes'
           id='notes'
           rows={3}
-          className='mt-1 w-full rounded-md border border-neutral-300 px-3 py-2 text-sm'
+          className='mt-1 w-full rounded-md border border-neutral-300 px-3 py-2'
         />
         {state?.errors?.notes?.map((error) => (
-          <p key={error} className='mt-1 text-sm text-red-600'>
+          <p key={error} className='mt-1 text-red-600'>
             {error}
           </p>
         ))}
@@ -99,12 +99,12 @@ const MaintenanceRecordForm = ({ vehicleId, categories }: { vehicleId: string; c
         <Field label='Next due date (optional)' name='nextDueDate' type='date' errors={state?.errors?.nextDueDate} />
       </div>
 
-      {state?.message && <p className='text-sm text-red-600'>{state.message}</p>}
+      {state?.message && <p className='text-red-600'>{state.message}</p>}
 
       <button
         type='submit'
         disabled={isPending}
-        className='rounded-md bg-neutral-900 px-4 py-2 text-sm font-medium text-white hover:bg-neutral-700 disabled:opactiy-50'
+        className='rounded-md bg-neutral-900 px-4 py-2 font-medium text-white hover:bg-neutral-700 disabled:opactiy-50'
       >
         {isPending ? "Saving..." : "Log maintenance"}
       </button>
@@ -127,17 +127,12 @@ function Field({
 }) {
   return (
     <div>
-      <label htmlFor={name} className='block text-sm font-medium text-neutral-700'>
+      <label htmlFor={name} className='block font-medium text-neutral-700'>
         {label}
       </label>
-      <input
-        id={name}
-        name={name}
-        type={type}
-        className='mt-1 w-full rounded-md border border-neutral-300 px-3 py-2 text-sm'
-      />
+      <input id={name} name={name} type={type} className='mt-1 w-full rounded-md border border-neutral-300 px-3 py-2' />
       {errors?.map((error) => (
-        <p key={error} className='mt-1 text-sm text-red-600'>
+        <p key={error} className='mt-1 text-red-600'>
           {error}
         </p>
       ))}
