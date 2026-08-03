@@ -26,20 +26,20 @@ const UpcomingMaintenancePage = async () => {
   const upcoming = records.filter((record) => getStatus(record, now) === "upcoming");
 
   return (
-    <main className='mx-auto max-w-3xl px-6 py-12'>
-      <Link href='/vehicles' className='text-sm text-neutral-500 hover:text-neutral-800'>
+    <main className='mx-auto w-2xl px-6 py-12'>
+      <Link href='/vehicles' className='text-neutral-500 hover:text-neutral-800'>
         ← Back to garage
       </Link>
 
       <div className='mt-4 mb-10 border-b border-neutral-200 pb-6'>
-        <p className='font-mono text-xs uppercase tracking-widest text-amber-700'>Dashboard</p>
+        <p className='font-mono uppercase tracking-widest text-amber-700'>Dashboard</p>
         <h1 className='mt-1 text-3xl font-semibold text-neutral-900'>Upcoming maintenance</h1>
       </div>
 
       {records.length === 0 ? (
         <div className='rounded-lg border border-dashed border-neutral-300 px-6 py-16 text-center'>
           <p className='text-neutral-600'>Nothing on the horizon.</p>
-          <p className='mt-1 text-sm text-neutral-500'>
+          <p className='mt-1 text-neutral-500'>
             Set a &ldquo;next due&rdquo; date or mileage when logging maintenance to see it here.
           </p>
         </div>
@@ -78,9 +78,9 @@ function RecordList({ records, tone }: { records: UpcomingRecord[]; tone: "overd
           <Link href={`/vehicles/${record.vehicleId}`} className='block hover:opacity-70'>
             <div className='flex items-baseline justify-between'>
               <p className='font-medium text-neutral-900'>{record.category?.name ?? record.title ?? "Maintenance"}</p>
-              <p className='text-sm text-neutral-500'>{record.vehicle.nickname}</p>
+              <p className='text-neutral-500'>{record.vehicle.nickname}</p>
             </div>
-            <p className='mt-1 font-mono text-sm text-neutral-500'>
+            <p className='mt-1 font-mono text-neutral-500'>
               {record.nextDueDate && `Due ${new Date(record.nextDueDate).toLocaleDateString()}`}
               {record.nextDueDate && record.nextDueMileage != null && " · "}
               {record.nextDueMileage != null &&
