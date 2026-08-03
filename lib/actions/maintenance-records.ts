@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
+import { redirect, notFound } from "next/navigation";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
 
@@ -85,7 +85,7 @@ export async function getMaintenanceRecordById(id: string) {
   });
 
   if (!record) {
-    throw new Error(`Maintenance record with id ${id} not found`);
+    notFound();
   }
 
   return record;

@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
+import { redirect, notFound } from "next/navigation";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
 
@@ -30,6 +30,8 @@ export type CreateVehicleState = {
 export async function createVehicle(_prevState: CreateVehicleState, formData: FormData): Promise<CreateVehicleState> {
   const raw = Object.fromEntries(formData.entries());
 
+  // Blank optional fields arrive as "" from the form; treat them as "not provided"
+  // rather than letting Zod choke on an empty string for a number/date field.
   const cleaned = {
     ...raw,
     vin: raw.vin === "" ? undefined : raw.vin,
@@ -71,7 +73,7 @@ export async function getVehicleById(id: string) {
   });
 
   if (!vehicle) {
-    throw new Error(`Vehicle with id ${id} not found`);
+    notFound();
   }
 
   return vehicle;
