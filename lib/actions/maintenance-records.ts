@@ -5,7 +5,8 @@ import { redirect } from "next/navigation";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
 
-// Field the form itself collects. vehicleId is deliberately exluded here - it's bound into the action via .bind() from the page, not submitted by the form.
+// Fields the form itself collects. vehicleId is deliberately excluded here —
+// it's bound into the action via .bind() from the page, not submitted by the form.
 const maintenanceRecordFormSchema = z.object({
   categoryId: z.uuid().optional().nullable(),
   title: z.string().optional().nullable(),
@@ -28,17 +29,18 @@ export type MaintenanceRecordInput = z.infer<typeof maintenanceRecordSchema>;
 
 export type CreateMaintenanceRecordState = {
   errors?: Partial<Record<keyof MaintenanceRecordFormInput, string[]>>;
-  message: string;
+  message?: string;
 } | null;
 
 export async function createMaintenanceRecord(
   vehicleId: string,
   _prevState: CreateMaintenanceRecordState,
   formData: FormData,
-) {
+): Promise<CreateMaintenanceRecordState> {
   const raw = Object.fromEntries(formData.entries());
 
-  // Blank optional fields arrive as "" from the form; treat them as "not provided" rather than letting Zod choke on an empty string for a number/date field.
+  // Blank optional fields arrive as "" from the form; treat them as "not provided"
+  // rather than letting Zod choke on an empty string for a number/date field.
   const cleaned = {
     ...raw,
     categoryId: raw.categoryId === "" ? undefined : raw.categoryId,
@@ -143,8 +145,10 @@ export async function getMaintenanceCategories() {
 
 export async function getUpcomingMaintenance() {
   return prisma.maintenanceRecord.findMany({
-    where: { nextDueDate: { not: null } },
-    orderBy: { nextDueDate: "asc" },
+    where: {
+      OR: [{ nextDueDate: { not: null } }, { nextDueMileage: { not: null } }],
+    },
+    orderBy: [{ nextDueDate: { sort: "asc", nulls: "last" } }],
     include: { category: true, vehicle: true },
   });
 }

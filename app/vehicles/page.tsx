@@ -11,12 +11,17 @@ const VehiclesPage = async () => {
           <p className='font-mono text-xs uppercase tracking-widest text-amber-700'>Garage</p>
           <h1 className='mt-1 text-3xl font-semibold text-neutral-900'>Your Vehicles</h1>
         </div>
-        <Link
-          href='/vehicles/new'
-          className='rounded-md bg-neutral-900 px-4 py-2 text-sm font-medium text-white hover:bg-neutral-700'
-        >
-          Add Vehicle
-        </Link>
+        <div className='flex items-center gap-4'>
+          <Link href='/maintenance' className='text-sm text-neutral-500 hover:text-neutral-800'>
+            Upcoming maintenance
+          </Link>
+          <Link
+            href='/vehicles/new'
+            className='rounded-md bg-neutral-900 px-4 py-2 text-sm font-medium text-white hover:bg-neutral-700'
+          >
+            Add vehicle
+          </Link>
+        </div>
       </div>
 
       {vehicles.length === 0 ? (
