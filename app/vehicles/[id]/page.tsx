@@ -4,6 +4,12 @@ import { getMaintenanceCategories, deleteMaintenanceRecord } from "@/lib/actions
 import MaintenanceRecordForm from "./maintenance-record-form";
 import DeleteButton from "@/components/delete-button";
 
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const vehicle = await getVehicleById(id);
+  return { title: vehicle.nickname };
+}
+
 const VehicleDetailsPage = async ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = await params;
 

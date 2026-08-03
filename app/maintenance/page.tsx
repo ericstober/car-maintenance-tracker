@@ -1,5 +1,10 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { getUpcomingMaintenance } from "@/lib/actions/maintenance-records";
+
+export const metadata: Metadata = {
+  title: "Upcoming Maintenance",
+};
 
 type UpcomingRecord = Awaited<ReturnType<typeof getUpcomingMaintenance>>[number];
 

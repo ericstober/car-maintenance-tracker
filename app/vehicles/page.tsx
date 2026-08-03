@@ -1,5 +1,10 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { getVehicles } from "@/lib/actions/vehicles";
+
+export const metadata: Metadata = {
+  title: "Vehicles",
+};
 
 const VehiclesPage = async () => {
   const vehicles = await getVehicles();

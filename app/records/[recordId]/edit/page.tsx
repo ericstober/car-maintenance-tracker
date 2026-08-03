@@ -2,6 +2,12 @@ import Link from "next/link";
 import { getMaintenanceRecordById, getMaintenanceCategories } from "@/lib/actions/maintenance-records";
 import EditMaintenanceRecordForm from "./edit-maintenance-record-form";
 
+export async function generateMetadata({ params }: { params: Promise<{ recordId: string }> }) {
+  const { recordId } = await params;
+  const record = await getMaintenanceRecordById(recordId);
+  return { title: `Edit ${record.category?.name ?? record.title ?? "Record"}` };
+}
+
 const EditMaintenanceRecordPage = async ({ params }: { params: Promise<{ recordId: string }> }) => {
   const { recordId } = await params;
 

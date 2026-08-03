@@ -2,6 +2,12 @@ import Link from "next/link";
 import { getVehicleById } from "@/lib/actions/vehicles";
 import EditVehicleForm from "./edit-vehicle-form";
 
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const vehicle = await getVehicleById(id);
+  return { title: `Edit ${vehicle.nickname}` };
+}
+
 const EditVehiclePage = async ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = await params;
   const vehicle = await getVehicleById(id);
